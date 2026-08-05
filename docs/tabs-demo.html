@@ -1,0 +1,93 @@
+<!doctype html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Tabs Demo</title>
+  <link rel="stylesheet" href="../src/styles/tokens.css" />
+  <link rel="stylesheet" href="../src/components/tabs/tabs.css" />
+  <style>
+    body {
+      margin: 0;
+      padding: var(--space-xl);
+      background: var(--color-bg);
+      color: var(--color-text);
+      font-family: system-ui, -apple-system, "Segoe UI", sans-serif;
+      line-height: 1.6;
+    }
+
+    h1 {
+      font-size: 1.5rem;
+    }
+
+    .container {
+      max-width: 640px;
+    }
+
+    .log {
+      margin-top: var(--space-lg);
+      padding: var(--space-md);
+      background: var(--color-surface);
+      border: 1px solid var(--color-border);
+      border-radius: var(--radius-md);
+      font-family: ui-monospace, monospace;
+      font-size: var(--font-size-sm);
+      min-height: 4em;
+      max-height: 12em;
+      overflow-y: auto;
+      white-space: pre-wrap;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <h1>Tabs 컴포넌트 데모</h1>
+    <p>탭을 클릭하거나 포커스 후 방향키(←/→, Home, End)로 탐색해보세요. 방향키 이동 시 즉시 활성화됩니다.</p>
+
+    <div id="myTabs" class="tabs">
+      <div class="tabs-list" role="tablist">
+        <button class="tabs-tab" role="tab" aria-selected="true" aria-controls="panel-1" id="tab-1">개요</button>
+        <button class="tabs-tab" role="tab" aria-selected="false" aria-controls="panel-2" id="tab-2" tabindex="-1">사용법</button>
+        <button class="tabs-tab" role="tab" aria-selected="false" aria-controls="panel-3" id="tab-3" tabindex="-1">접근성</button>
+      </div>
+      <div class="tabs-panel" role="tabpanel" id="panel-1" aria-labelledby="tab-1" tabindex="0">
+        Tabs는 Component 베이스 클래스를 상속받아 Modal, Accordion과 동일한 패턴(옵션 병합,
+        emit을 통한 이벤트 발행, destroy 시 리스너 일괄 해제)으로 동작합니다.
+      </div>
+      <div class="tabs-panel" role="tabpanel" id="panel-2" aria-labelledby="tab-2" tabindex="0" hidden>
+        <code>new Tabs('#myTabs', { activeIndex: 0, onChange })</code> 형태로 생성하고,
+        <code>select(index)</code> 메서드로 원하는 탭을 프로그래밍 방식으로 전환할 수 있습니다.
+      </div>
+      <div class="tabs-panel" role="tabpanel" id="panel-3" aria-labelledby="tab-3" tabindex="0" hidden>
+        WAI-ARIA 탭 패턴의 자동 활성화(automatic activation) 방식을 따릅니다. 방향키로 포커스를
+        옮기면 별도의 Enter/Space 없이 즉시 해당 패널이 활성화됩니다.
+      </div>
+    </div>
+
+    <div class="log" id="eventLog">이벤트 로그가 여기에 표시됩니다.</div>
+  </div>
+
+  <script type="module">
+    import Tabs from '../src/components/tabs/tabs.js';
+
+    const logEl = document.getElementById('eventLog');
+    function log(message) {
+      const time = new Date().toLocaleTimeString();
+      logEl.textContent = `[${time}] ${message}\n` + logEl.textContent;
+    }
+
+    const tabs = new Tabs('#myTabs', {
+      activeIndex: 0,
+      onChange: ({ index }) => {
+        log(`onChange 콜백 — index: ${index}`);
+      },
+    });
+
+    document.getElementById('myTabs').addEventListener('tabs:change', (e) => {
+      log(`tabs:change 커스텀 이벤트 — index: ${e.detail.index}`);
+    });
+
+    window.__tabs = tabs;
+  </script>
+</body>
+</html>

@@ -1,0 +1,68 @@
+/**
+ * Tabs 컴포넌트 스타일
+ */
+.tabs-list {
+  display: flex;
+  gap: var(--space-xs);
+  border-bottom: 1px solid var(--color-border);
+}
+
+.tabs-tab {
+  position: relative;
+  padding: var(--space-sm) var(--space-md);
+  border: none;
+  background: transparent;
+  color: var(--color-text-muted);
+  font: inherit;
+  font-size: var(--font-size-md);
+  font-weight: 600;
+  cursor: pointer;
+  transition: color var(--transition-fast), background var(--transition-fast);
+}
+
+.tabs-tab::after {
+  content: '';
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: -1px;
+  height: 2px;
+  background: transparent;
+  transition: background var(--transition-fast);
+}
+
+.tabs-tab:hover {
+  color: var(--color-text);
+  background: var(--color-surface);
+}
+
+.tabs-tab:focus-visible {
+  outline: 2px solid var(--color-primary);
+  outline-offset: -2px;
+}
+
+.tabs-tab[aria-selected='true'] {
+  color: var(--color-primary);
+}
+
+.tabs-tab[aria-selected='true']::after {
+  background: var(--color-primary);
+}
+
+.tabs-panel {
+  padding: var(--space-md) 0;
+  color: var(--color-text);
+  font-size: var(--font-size-md);
+}
+
+.tabs-panel:focus-visible {
+  outline: 2px solid var(--color-primary);
+  outline-offset: 2px;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .tabs-tab,
+  .tabs-tab::after {
+    transition: none;
+  }
+}
