@@ -12,10 +12,13 @@ import Component from '../../core/Component.js';
  *   </ul>
  * </div>
  *
- * 포커스는 트리거 버튼에 유지되고(APG의 collapsible listbox 패턴), 열려있는 동안
- * aria-activedescendant로 하이라이트된 옵션을 가리킨다.
- * 키보드: 트리거에서 Enter/Space/ArrowDown(열기), 열린 상태에서 ArrowDown/ArrowUp(순환 이동),
- * Home/End(처음/끝), Enter/Space(선택+닫기), Escape(닫기)
+ * options 배열이 주어지면 <ul> 안의 <li>들을 동적으로 생성한다. 주어지지 않으면
+ * 마크업에 이미 존재하는 <li class="dropdown-option">들을 그대로 사용한다.
+ *
+ * 키보드: 트리거에 포커스를 유지한 채 aria-activedescendant로 하이라이트를 알린다
+ * (W3C APG의 "Collapsible Dropdown Listbox" 패턴).
+ * - 닫힌 상태: Enter/Space/ArrowDown → 열기 + 첫 옵션(또는 선택된 옵션) 하이라이트
+ * - 열린 상태: ArrowDown/ArrowUp(순환), Home/End, Enter/Space(선택+닫기+포커스 복귀), Escape(닫기+포커스 복귀)
  */
 export default class Dropdown extends Component {
   static eventNamespace = 'dropdown';
@@ -23,71 +26,88 @@ export default class Dropdown extends Component {
   constructor(el, userOptions = {}) {
     const defaultOptions = {
       options: null,
-      placeholder: null,
+      placeholder: '선택하세요',
       onSelect: null,
     };
     super(el, defaultOptions, userOptions);
 
     this._trigger = this.el.querySelector(':scope > .dropdown-trigger');
     this._list = this.el.querySelector(':scope > .dropdown-list');
-    this._placeholder = this.options.placeholder || this._trigger.textContent.trim();
 
     this._isOpen = false;
     this._highlightedIndex = -1;
-    this._selectedIndex = -1;
+    this._selectedValue = null;
 
     this._handleDocumentClick = this._handleDocumentClick.bind(this);
 
+    this._buildOptions();
     this._init();
   }
 
-  _init() {
-    if (Array.isArray(this.options.options) && this.options.options.length > 0) {
-      this._renderOptions(this.options.options);
+  _buildOptions() {
+    const { options } = this.options;
+
+    if (Array.isArray(options) && options.length > 0) {
+      this._list.innerHTML = '';
+      options.forEach((option, index) => {
+        const li = document.createElement('li');
+        li.className = 'dropdown-option';
+        li.setAttribute('role', 'option');
+        li.setAttribute('aria-selected', 'false');
+        li.dataset.value = option.value;
+        li.id = `${this.el.id || 'dropdown'}-option-${index}`;
+        li.textContent = option.label;
+        this._list.appendChild(li);
+      });
     }
 
-    this._options = [...this._list.querySelectorAll(':scope > .dropdown-option')];
-
-    const presetIndex = this._options.findIndex(
-      (option) => option.getAttribute('aria-selected') === 'true'
+    this._options = [...this._list.querySelectorAll(':scope > .dropdown-option')].map(
+      (optionEl, index) => {
+        if (!optionEl.id) {
+          optionEl.id = `${this.el.id || 'dropdown'}-option-${index}`;
+        }
+        return {
+          el: optionEl,
+          value: optionEl.dataset.value,
+          label: optionEl.textContent.trim(),
+        };
+      }
     );
-    if (presetIndex !== -1) {
-      this._applySelection(presetIndex, { silent: true });
-    } else {
-      this._trigger.textContent = this._placeholder;
-    }
-
-    this._on(this._trigger, 'click', () => this.toggle());
-    this._on(this._trigger, 'keydown', (e) => this._handleTriggerKeydown(e));
-    this._on(this._list, 'click', (e) => this._handleListClick(e));
-    this._on(document, 'click', this._handleDocumentClick);
   }
 
-  _renderOptions(options) {
-    this._list.innerHTML = '';
-    const prefix = this.el.id ? `${this.el.id}-option` : 'dropdown-option';
+  _init() {
+    this._on(this._trigger, 'click', () => this.toggle());
+    this._on(this._trigger, 'keydown', (e) => this._handleTriggerKeydown(e));
+    this._on(this._list, 'click', (e) => this._handleOptionClick(e));
+    this._on(document, 'click', this._handleDocumentClick);
 
-    options.forEach(({ value, label }, index) => {
-      const li = document.createElement('li');
-      li.className = 'dropdown-option';
-      li.setAttribute('role', 'option');
-      li.setAttribute('aria-selected', 'false');
-      li.dataset.value = value;
-      li.id = `${prefix}-${index}`;
-      li.textContent = label;
-      this._list.appendChild(li);
-    });
+    this._trigger.setAttribute('aria-expanded', 'false');
+    this._list.hidden = true;
+
+    const preselected = this._options.find(
+      (option) => option.el.getAttribute('aria-selected') === 'true'
+    );
+    this._options.forEach((option) =>
+      option.el.setAttribute('aria-selected', String(option === preselected))
+    );
+
+    if (preselected) {
+      this._selectedValue = preselected.value;
+      this._trigger.textContent = preselected.label;
+    } else {
+      this._trigger.textContent = this.options.placeholder;
+    }
   }
 
   open() {
-    if (this._isOpen || this._options.length === 0) return;
+    if (this._isOpen) return;
     this._isOpen = true;
 
     this._trigger.setAttribute('aria-expanded', 'true');
     this._list.hidden = false;
 
-    const startIndex = this._selectedIndex !== -1 ? this._selectedIndex : 0;
-    this._highlight(startIndex);
+    const selectedIndex = this._options.findIndex((option) => option.value === this._selectedValue);
+    this._setHighlight(selectedIndex >= 0 ? selectedIndex : 0);
 
     this.emit('open');
   }
@@ -97,13 +117,9 @@ export default class Dropdown extends Component {
     this._isOpen = false;
 
     this._trigger.setAttribute('aria-expanded', 'false');
-    this._trigger.removeAttribute('aria-activedescendant');
     this._list.hidden = true;
-
-    if (this._highlightedIndex !== -1) {
-      this._options[this._highlightedIndex]?.classList.remove('is-highlighted');
-    }
-    this._highlightedIndex = -1;
+    this._clearHighlight();
+    this._trigger.removeAttribute('aria-activedescendant');
 
     this.emit('close');
   }
@@ -113,48 +129,22 @@ export default class Dropdown extends Component {
   }
 
   select(value) {
-    const index = this._options.findIndex((option) => option.dataset.value === String(value));
-    if (index === -1) return;
-    this._applySelection(index);
+    const option = this._options.find((o) => o.value === value);
+    if (!option) return;
+
+    this._options.forEach((o) => o.el.setAttribute('aria-selected', String(o === option)));
+    this._selectedValue = option.value;
+    this._trigger.textContent = option.label;
+
     this.close();
-  }
+    this._trigger.focus();
 
-  _applySelection(index, { silent = false } = {}) {
-    const option = this._options[index];
-    if (!option) return;
-
-    this._options.forEach((opt, i) => {
-      opt.setAttribute('aria-selected', String(i === index));
-    });
-
-    this._selectedIndex = index;
-    this._trigger.textContent = option.textContent;
-
-    if (!silent) {
-      this.emit('select', { value: option.dataset.value, label: option.textContent });
-    }
-  }
-
-  _highlight(index) {
-    if (this._highlightedIndex !== -1) {
-      this._options[this._highlightedIndex]?.classList.remove('is-highlighted');
-    }
-
-    const option = this._options[index];
-    if (!option) return;
-
-    option.classList.add('is-highlighted');
-    option.scrollIntoView({ block: 'nearest' });
-    this._highlightedIndex = index;
-    this._trigger.setAttribute('aria-activedescendant', option.id);
+    this.emit('select', { value: option.value, label: option.label });
   }
 
   _handleTriggerKeydown(e) {
-    const count = this._options.length;
-    if (count === 0) return;
-
     if (!this._isOpen) {
-      if (['Enter', ' ', 'Spacebar', 'ArrowDown'].includes(e.key)) {
+      if (e.key === 'Enter' || e.key === ' ' || e.key === 'Spacebar' || e.key === 'ArrowDown') {
         e.preventDefault();
         this.open();
       }
@@ -164,59 +154,76 @@ export default class Dropdown extends Component {
     switch (e.key) {
       case 'ArrowDown':
         e.preventDefault();
-        this._highlight((this._highlightedIndex + 1) % count);
+        this._moveHighlight(1);
         break;
       case 'ArrowUp':
         e.preventDefault();
-        this._highlight((this._highlightedIndex - 1 + count) % count);
+        this._moveHighlight(-1);
         break;
       case 'Home':
         e.preventDefault();
-        this._highlight(0);
+        this._setHighlight(0);
         break;
       case 'End':
         e.preventDefault();
-        this._highlight(count - 1);
+        this._setHighlight(this._options.length - 1);
         break;
       case 'Enter':
       case ' ':
       case 'Spacebar':
         e.preventDefault();
-        if (this._highlightedIndex !== -1) {
-          this._applySelection(this._highlightedIndex);
-        }
-        this.close();
-        this._trigger.focus();
+        this._selectHighlighted();
         break;
       case 'Escape':
         e.preventDefault();
         this.close();
         this._trigger.focus();
         break;
-      case 'Tab':
-        this.close();
-        break;
       default:
         break;
     }
   }
 
-  _handleListClick(e) {
-    const option = e.target.closest('.dropdown-option');
-    if (!option || !this._list.contains(option)) return;
-
-    const index = this._options.indexOf(option);
-    if (index === -1) return;
-
-    this._applySelection(index);
-    this.close();
-    this._trigger.focus();
+  _handleOptionClick(e) {
+    const optionEl = e.target.closest('.dropdown-option');
+    if (!optionEl || !this._list.contains(optionEl)) return;
+    this.select(optionEl.dataset.value);
   }
 
   _handleDocumentClick(e) {
-    if (!this.el.contains(e.target)) {
-      this.close();
-    }
+    if (!this._isOpen) return;
+    if (this.el.contains(e.target)) return;
+    this.close();
+  }
+
+  _setHighlight(index) {
+    if (index < 0 || index >= this._options.length) return;
+    this._clearHighlight();
+
+    this._highlightedIndex = index;
+    const option = this._options[index];
+    option.el.classList.add('is-highlighted');
+    this._trigger.setAttribute('aria-activedescendant', option.el.id);
+    option.el.scrollIntoView({ block: 'nearest' });
+  }
+
+  _clearHighlight() {
+    const current = this._options[this._highlightedIndex];
+    if (current) current.el.classList.remove('is-highlighted');
+    this._highlightedIndex = -1;
+  }
+
+  _moveHighlight(delta) {
+    const count = this._options.length;
+    if (count === 0) return;
+    const nextIndex = (this._highlightedIndex + delta + count) % count;
+    this._setHighlight(nextIndex);
+  }
+
+  _selectHighlighted() {
+    const option = this._options[this._highlightedIndex];
+    if (!option) return;
+    this.select(option.value);
   }
 
   destroy() {

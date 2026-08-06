@@ -43,13 +43,20 @@
   <div class="container">
     <h1>Dropdown 컴포넌트 데모</h1>
     <p>
-      트리거 버튼에 포커스를 준 뒤 Enter/Space/↓로 목록을 열고, ↑/↓(순환), Home/End로
-      하이라이트를 이동해보세요. Enter/Space로 선택, Escape로 선택 없이 닫을 수 있습니다.
+      트리거를 클릭하거나 포커스 후 Enter/Space/방향키(↓)로 열어보세요. 열린 상태에서는
+      ↑/↓(순환), Home/End로 하이라이트를 옮기고, Enter/Space로 선택, Escape로 취소할 수 있습니다.
       목록 바깥을 클릭해도 닫힙니다.
     </p>
 
     <div id="myDropdown" class="dropdown">
-      <button class="dropdown-trigger" aria-haspopup="listbox" aria-expanded="false" id="dropdown-btn">선택하세요</button>
+      <button
+        class="dropdown-trigger"
+        aria-haspopup="listbox"
+        aria-expanded="false"
+        id="dropdown-btn"
+      >
+        선택하세요
+      </button>
       <ul class="dropdown-list" role="listbox" aria-labelledby="dropdown-btn" hidden></ul>
     </div>
 
@@ -66,7 +73,6 @@
     }
 
     const dropdown = new Dropdown('#myDropdown', {
-      placeholder: '과일을 선택하세요',
       options: [
         { value: 'apple', label: '사과' },
         { value: 'banana', label: '바나나' },
@@ -75,6 +81,7 @@
         { value: 'peach', label: '복숭아' },
         { value: 'watermelon', label: '수박' },
       ],
+      placeholder: '과일을 선택하세요',
       onSelect: ({ value, label }) => {
         log(`onSelect 콜백 — value: ${value}, label: ${label}`);
       },
@@ -84,10 +91,10 @@
       log(`dropdown:select 커스텀 이벤트 — value: ${e.detail.value}, label: ${e.detail.label}`);
     });
     document.getElementById('myDropdown').addEventListener('dropdown:open', () => {
-      log('dropdown:open 커스텀 이벤트');
+      log('dropdown:open');
     });
     document.getElementById('myDropdown').addEventListener('dropdown:close', () => {
-      log('dropdown:close 커스텀 이벤트');
+      log('dropdown:close');
     });
 
     window.__dropdown = dropdown;

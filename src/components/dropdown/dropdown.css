@@ -1,18 +1,19 @@
 /**
  * Dropdown 컴포넌트 스타일
- * .dropdown-list는 트리거 기준 absolute 위치로 떠 있으므로 .dropdown에 position: relative 필요
+ * .dropdown-list는 트리거 기준 절대 위치로 펼쳐지며, 열림 여부는 dropdown.js가
+ * hidden 속성으로 제어한다
  */
 .dropdown {
   position: relative;
   display: inline-block;
-  min-width: 200px;
+  min-width: 220px;
 }
 
 .dropdown-trigger {
   display: flex;
   align-items: center;
   justify-content: space-between;
-  gap: var(--space-md);
+  gap: var(--space-sm);
   width: 100%;
   padding: var(--space-sm) var(--space-md);
   border: 1px solid var(--color-border);
@@ -23,7 +24,7 @@
   font-size: var(--font-size-md);
   text-align: left;
   cursor: pointer;
-  transition: border-color var(--transition-fast), background var(--transition-fast);
+  transition: border-color var(--transition-fast), box-shadow var(--transition-fast);
 }
 
 .dropdown-trigger::after {
@@ -31,9 +32,10 @@
   flex-shrink: 0;
   width: 8px;
   height: 8px;
+  margin-left: var(--space-sm);
   border-right: 2px solid var(--color-text-muted);
   border-bottom: 2px solid var(--color-text-muted);
-  transform: rotate(45deg) translateY(-2px);
+  transform: rotate(45deg);
   transition: transform var(--transition-fast);
 }
 
@@ -46,8 +48,12 @@
   outline-offset: 2px;
 }
 
+.dropdown-trigger[aria-expanded='true'] {
+  border-color: var(--color-primary);
+}
+
 .dropdown-trigger[aria-expanded='true']::after {
-  transform: rotate(-135deg) translateY(-2px);
+  transform: rotate(-135deg);
 }
 
 .dropdown-list {
@@ -63,7 +69,7 @@
   border: 1px solid var(--color-border);
   border-radius: var(--radius-md);
   box-shadow: var(--shadow-md);
-  max-height: 240px;
+  max-height: 260px;
   overflow-y: auto;
 }
 
@@ -85,11 +91,6 @@
 .dropdown-option[aria-selected='true'] {
   color: var(--color-primary);
   font-weight: 600;
-}
-
-.dropdown-option[aria-selected='true']::after {
-  content: '\2713';
-  float: right;
 }
 
 @media (prefers-reduced-motion: reduce) {
