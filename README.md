@@ -34,11 +34,38 @@ vanilla-ui-kit/
   new Modal(el, { onOpen: () => {} });
   ```
 
+## 로컬에서 확인하는 법
+
+데모 페이지(`docs/*.html`)는 ES 모듈(`type="module"`)로 컴포넌트를 불러오기 때문에
+`file://`로 직접 열면 브라우저 CORS 정책에 막혀 import가 실패합니다. 아래 방법 중
+하나로 로컬 정적 서버를 통해 열어주세요.
+
+**방법 1. VS Code Live Server 확장 프로그램**
+
+VS Code에 [Live Server](https://marketplace.visualstudio.com/items?itemName=ritwickdey.LiveServer)
+확장을 설치한 뒤, 프로젝트 루트에서 `docs/modal-demo.html` 파일을 열고
+우클릭 → "Open with Live Server"를 선택합니다.
+
+**방법 2. Python 내장 서버**
+
+```bash
+python3 -m http.server 8000
+```
+
+실행 후 브라우저에서 아래 주소로 접속합니다.
+
+```
+http://localhost:8000/docs/modal-demo.html
+http://localhost:8000/docs/accordion-demo.html
+http://localhost:8000/docs/tabs-demo.html
+http://localhost:8000/docs/dropdown-demo.html
+```
+
 ## 진행 상황
 
 - [x] 8/1 컴포넌트 목록/API 설계
 - [x] 8/2 공통 기반 구조 & 유틸 (Component.js, dom.js, a11y.js, tokens.css)
-- [ ] 8/3 Modal 구현
-- [ ] 8/4 Accordion 구현
-- [ ] 8/5 Tabs 구현
-- [ ] 8/6 Dropdown 구현
+- [x] 8/3 Modal 구현
+- [x] 8/4 Accordion 구현
+- [x] 8/5 Tabs 구현
+- [x] 8/6 Dropdown 구현
