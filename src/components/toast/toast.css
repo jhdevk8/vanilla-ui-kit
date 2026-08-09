@@ -1,0 +1,132 @@
+/**
+ * Toast 컴포넌트 스타일
+ * .toast-container는 toast.js가 body에 직접 삽입하는 요소로, position 옵션에 따라
+ * 화면 6방향(상/하 × 좌/중/우) 중 한 곳에 고정된다. 컨테이너 자체는 pointer-events: none이라
+ * 빈 공간을 클릭해도 페이지 요소를 가리지 않으며, 개별 .toast만 pointer-events: auto로 되돌린다.
+ */
+.toast-container {
+  position: fixed;
+  z-index: var(--z-toast);
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-sm);
+  max-width: min(360px, calc(100vw - var(--space-lg) * 2));
+  pointer-events: none;
+}
+
+.toast-container--top-left,
+.toast-container--top-center,
+.toast-container--top-right {
+  top: var(--space-lg);
+}
+
+.toast-container--bottom-left,
+.toast-container--bottom-center,
+.toast-container--bottom-right {
+  bottom: var(--space-lg);
+  /* 새 토스트가 DOM 끝에 추가되어도 화면 아래쪽 가장자리에 붙어 위로 쌓이도록 순서를 뒤집음 */
+  flex-direction: column-reverse;
+}
+
+.toast-container--top-left,
+.toast-container--bottom-left {
+  left: var(--space-lg);
+  align-items: flex-start;
+}
+
+.toast-container--top-center,
+.toast-container--bottom-center {
+  left: 50%;
+  transform: translateX(-50%);
+  align-items: center;
+}
+
+.toast-container--top-right,
+.toast-container--bottom-right {
+  right: var(--space-lg);
+  align-items: flex-end;
+}
+
+.toast {
+  display: flex;
+  align-items: center;
+  gap: var(--space-sm);
+  min-width: 240px;
+  max-width: 100%;
+  padding: var(--space-sm) var(--space-md);
+  border-radius: var(--radius-md);
+  box-shadow: var(--shadow-md);
+  background: var(--color-surface);
+  color: var(--color-text);
+  border-left: 4px solid var(--color-border);
+  font-size: var(--font-size-sm);
+  line-height: 1.5;
+  pointer-events: auto;
+  opacity: 0;
+  transition: opacity var(--transition-base), transform var(--transition-base);
+}
+
+.toast-container--top-left .toast,
+.toast-container--top-center .toast,
+.toast-container--top-right .toast {
+  transform: translateY(-12px);
+}
+
+.toast-container--bottom-left .toast,
+.toast-container--bottom-center .toast,
+.toast-container--bottom-right .toast {
+  transform: translateY(12px);
+}
+
+.toast.is-visible {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+.toast.is-leaving {
+  opacity: 0;
+}
+
+.toast--success {
+  border-left-color: #16a34a;
+}
+
+.toast--error {
+  border-left-color: var(--color-danger);
+}
+
+.toast--info {
+  border-left-color: var(--color-primary);
+}
+
+.toast--warning {
+  border-left-color: #d97706;
+}
+
+.toast-message {
+  flex: 1;
+}
+
+.toast-close {
+  flex-shrink: 0;
+  border: none;
+  background: transparent;
+  color: var(--color-text-muted);
+  font-size: var(--font-size-lg);
+  line-height: 1;
+  cursor: pointer;
+  padding: 0 var(--space-xs);
+  border-radius: var(--radius-sm);
+  transition: background var(--transition-fast), color var(--transition-fast);
+}
+
+.toast-close:hover {
+  background: var(--color-border);
+  color: var(--color-text);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .toast {
+    transition: none;
+  }
+}
