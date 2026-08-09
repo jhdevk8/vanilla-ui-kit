@@ -1,0 +1,125 @@
+/**
+ * Carousel 컴포넌트 스타일
+ * .carousel-track은 carousel.js가 transform: translateX(-{index*100}%)로
+ * 직접 제어하므로, CSS는 레이아웃/전환/버튼/인디케이터 스타일만 담당한다
+ */
+.carousel {
+  position: relative;
+  overflow: hidden;
+  border-radius: var(--radius-lg);
+  background: var(--color-surface);
+}
+
+.carousel-track {
+  display: flex;
+  width: 100%;
+  touch-action: pan-y;
+  transition: transform var(--transition-base);
+}
+
+.carousel-slide {
+  flex: 0 0 100%;
+  width: 100%;
+  min-height: 260px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--color-text);
+  font-size: var(--font-size-lg);
+  font-weight: 600;
+  user-select: none;
+}
+
+.carousel-prev,
+.carousel-next {
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+  z-index: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 36px;
+  height: 36px;
+  border: none;
+  border-radius: 50%;
+  background: var(--color-bg);
+  color: var(--color-text);
+  font-size: 1.25rem;
+  line-height: 1;
+  box-shadow: var(--shadow-md);
+  cursor: pointer;
+  transition: background var(--transition-fast), opacity var(--transition-fast);
+}
+
+.carousel-prev:hover,
+.carousel-next:hover {
+  background: var(--color-surface);
+}
+
+.carousel-prev:focus-visible,
+.carousel-next:focus-visible {
+  outline: 2px solid var(--color-primary);
+  outline-offset: 2px;
+}
+
+.carousel-prev:disabled,
+.carousel-next:disabled {
+  opacity: 0.35;
+  cursor: not-allowed;
+}
+
+.carousel-prev {
+  left: var(--space-sm);
+}
+
+.carousel-next {
+  right: var(--space-sm);
+}
+
+.carousel-indicators {
+  position: absolute;
+  left: 50%;
+  bottom: var(--space-sm);
+  transform: translateX(-50%);
+  z-index: 1;
+  display: flex;
+  gap: var(--space-xs);
+  padding: var(--space-xs) var(--space-sm);
+  border-radius: var(--radius-lg);
+  background: var(--color-overlay);
+}
+
+.carousel-dot {
+  width: 8px;
+  height: 8px;
+  padding: 0;
+  border: none;
+  border-radius: 50%;
+  background: rgba(255, 255, 255, 0.5);
+  cursor: pointer;
+  transition: background var(--transition-fast), transform var(--transition-fast);
+}
+
+.carousel-dot:hover {
+  background: rgba(255, 255, 255, 0.8);
+}
+
+.carousel-dot:focus-visible {
+  outline: 2px solid var(--color-primary);
+  outline-offset: 2px;
+}
+
+.carousel-dot.active {
+  background: #ffffff;
+  transform: scale(1.2);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .carousel-track,
+  .carousel-prev,
+  .carousel-next,
+  .carousel-dot {
+    transition: none;
+  }
+}
