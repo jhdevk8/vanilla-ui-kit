@@ -9,8 +9,7 @@ DOM 조작, 포커스 트랩, 키보드 내비게이션 같은 기본기를 직�
 
 ## Live Demo
 
-<!-- TODO: GitHub Pages 배포 후 실제 URL로 교체 -->
-🔗 [https://\<github-username\>.github.io/vanilla-ui-kit/](https://github.com/)
+🔗 [https://jhdevk8.github.io/vanilla-ui-kit/](https://jhdevk8.github.io/vanilla-ui-kit/)
 
 ## 기술 스택
 
@@ -145,4 +144,4 @@ vanilla-ui-kit/
 - [x] 8/5 Tabs 구현
 - [x] 8/6 Dropdown 구현
 - [x] 8/10 통합 문서 페이지 (index.html)
-- [ ] GitHub Pages 배포
+- [x] 8/14 GitHub Pages 배포
