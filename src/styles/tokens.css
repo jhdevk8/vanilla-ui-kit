@@ -38,4 +38,12 @@
   /* Layers */
   --z-modal: 1000;
   --z-toast: 1100;
+
+  /*
+   * Breakpoints — 모바일: ~640px, 태블릿: 641~1024px, 데스크톱: 1025px~
+   * CSS 미디어 쿼리 조건에는 var()를 쓸 수 없어 @media에는 아래 px 값을 직접 입력해야 하지만,
+   * matchMedia() 등 JS에서 참조하거나 값을 문서화해두는 용도로 남겨둔다.
+   */
+  --breakpoint-mobile: 640px;
+  --breakpoint-tablet: 1024px;
 }

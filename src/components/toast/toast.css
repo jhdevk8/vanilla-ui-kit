@@ -130,3 +130,27 @@
     transition: none;
   }
 }
+
+/*
+ * 모바일: 구석에 뜨면 잘 보이지 않으므로 position 옵션(top/bottom, left/center/right)과
+ * 무관하게 항상 화면 상단 전체 폭으로 표시한다. 선택자 특이도가 위의 위치별 변형 규칙과
+ * 동일(클래스 2개)하므로, 파일 뒤쪽에 위치한 이 규칙이 캐스케이드 순서상 우선한다.
+ */
+@media (max-width: 640px) {
+  .toast-container {
+    top: var(--space-sm);
+    right: var(--space-sm);
+    left: var(--space-sm);
+    bottom: auto;
+    transform: none;
+    max-width: none;
+    align-items: stretch;
+    flex-direction: column;
+  }
+
+  .toast-container .toast {
+    min-width: 0;
+    width: 100%;
+    transform: translateY(-12px);
+  }
+}

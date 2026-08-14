@@ -123,3 +123,35 @@
     transition: none;
   }
 }
+
+/*
+ * 모바일/태블릿: 터치로 조작하는 경우가 많으므로 prev/next 버튼과 인디케이터의
+ * 실제 탭 영역을 WCAG 권장 최소 크기(44x44px) 이상으로 키운다.
+ * 인디케이터는 시각적 점 크기는 유지하고, padding + background-clip: content-box로
+ * 눈에 보이지 않는 여백만 늘려 탭 영역을 확보한다.
+ */
+@media (max-width: 1024px) {
+  .carousel-prev,
+  .carousel-next {
+    width: 44px;
+    height: 44px;
+    font-size: 1.5rem;
+  }
+
+  .carousel-indicators {
+    gap: 0;
+  }
+
+  .carousel-dot {
+    /*
+     * padding로 히트 영역을 늘리는 트릭은 box-sizing에 좌우되므로, 이 컴포넌트를
+     * 불러오는 페이지가 `* { box-sizing: border-box }` 같은 전역 리셋을 쓰더라도
+     * 항상 8px 점 + 18px 여백(합 44px)이 되도록 content-box로 고정한다.
+     */
+    box-sizing: content-box;
+    width: 8px;
+    height: 8px;
+    padding: 18px;
+    background-clip: content-box;
+  }
+}

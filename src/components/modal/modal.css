@@ -80,3 +80,24 @@
   gap: var(--space-sm);
   margin-top: var(--space-lg);
 }
+
+/* 모바일: 화면 폭에 맞춰 다이얼로그가 줄어들도록 max-width를 뷰포트 기준으로 재정의 */
+@media (max-width: 640px) {
+  .modal {
+    padding: var(--space-sm);
+  }
+
+  .modal-content {
+    max-width: 90vw;
+    max-height: 90vh;
+    padding: var(--space-md);
+  }
+
+  .modal-footer {
+    flex-wrap: wrap;
+  }
+
+  .modal-footer button {
+    flex: 1 1 auto;
+  }
+}

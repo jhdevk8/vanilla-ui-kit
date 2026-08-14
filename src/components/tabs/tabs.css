@@ -66,3 +66,17 @@
     transition: none;
   }
 }
+
+/* 모바일/태블릿: 탭이 많아 한 줄에 다 들어가지 않으면 가로 스크롤 */
+@media (max-width: 1024px) {
+  .tabs-list {
+    overflow-x: auto;
+    overflow-y: hidden;
+    -webkit-overflow-scrolling: touch;
+    scrollbar-width: thin;
+  }
+
+  .tabs-tab {
+    flex-shrink: 0;
+  }
+}

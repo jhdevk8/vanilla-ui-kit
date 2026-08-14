@@ -7,6 +7,7 @@
   position: relative;
   display: inline-block;
   min-width: 220px;
+  max-width: 100%;
 }
 
 .dropdown-trigger {
@@ -69,7 +70,8 @@
   border: 1px solid var(--color-border);
   border-radius: var(--radius-md);
   box-shadow: var(--shadow-md);
-  max-height: 260px;
+  /* 화면 높이가 작은 기기에서도 목록이 뷰포트를 넘지 않도록 vh 기준 상한을 함께 둠 */
+  max-height: min(260px, 60vh);
   overflow-y: auto;
 }
 
