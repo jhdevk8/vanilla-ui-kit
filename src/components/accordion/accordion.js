@@ -15,13 +15,14 @@ import Component from '../../core/Component.js';
 export default class Accordion extends Component {
   static eventNamespace = 'accordion';
 
+  static defaultOptions = {
+    multiple: false,
+    defaultOpen: null,
+    onToggle: null,
+  };
+
   constructor(el, userOptions = {}) {
-    const defaultOptions = {
-      multiple: false,
-      defaultOpen: null,
-      onToggle: null,
-    };
-    super(el, defaultOptions, userOptions);
+    super(el, userOptions);
 
     this._items = [...this.el.querySelectorAll(':scope > .accordion-item')];
     this._triggers = this._items.map((item) => item.querySelector('.accordion-trigger'));

@@ -1,16 +1,18 @@
 /**
  * 모든 UI 컴포넌트의 베이스 클래스
- * - 공통 옵션 병합
+ * - 공통 옵션 병합 (하위 클래스의 static defaultOptions + 사용자 옵션)
  * - 커스텀 이벤트 발행 (emit)
  * - 리스너 추적 및 destroy 시 일괄 해제
  */
 export default class Component {
-  constructor(el, defaultOptions = {}, userOptions = {}) {
+  static defaultOptions = {};
+
+  constructor(el, userOptions = {}) {
     this.el = typeof el === 'string' ? document.querySelector(el) : el;
     if (!this.el) {
       throw new Error(`[Component] 요소를 찾을 수 없습니다: ${el}`);
     }
-    this.options = { ...defaultOptions, ...userOptions };
+    this.options = { ...this.constructor.defaultOptions, ...userOptions };
     this._listeners = [];
   }
 

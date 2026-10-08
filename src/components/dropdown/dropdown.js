@@ -23,13 +23,14 @@ import Component from '../../core/Component.js';
 export default class Dropdown extends Component {
   static eventNamespace = 'dropdown';
 
+  static defaultOptions = {
+    options: null,
+    placeholder: '선택하세요',
+    onSelect: null,
+  };
+
   constructor(el, userOptions = {}) {
-    const defaultOptions = {
-      options: null,
-      placeholder: '선택하세요',
-      onSelect: null,
-    };
-    super(el, defaultOptions, userOptions);
+    super(el, userOptions);
 
     this._trigger = this.el.querySelector(':scope > .dropdown-trigger');
     this._list = this.el.querySelector(':scope > .dropdown-list');

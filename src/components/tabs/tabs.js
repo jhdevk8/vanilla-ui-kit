@@ -19,12 +19,13 @@ import Component from '../../core/Component.js';
 export default class Tabs extends Component {
   static eventNamespace = 'tabs';
 
+  static defaultOptions = {
+    activeIndex: 0,
+    onChange: null,
+  };
+
   constructor(el, userOptions = {}) {
-    const defaultOptions = {
-      activeIndex: 0,
-      onChange: null,
-    };
-    super(el, defaultOptions, userOptions);
+    super(el, userOptions);
 
     this._tabs = [...this.el.querySelectorAll(':scope > .tabs-list > .tabs-tab')];
     this._panels = [...this.el.querySelectorAll(':scope > .tabs-panel')];

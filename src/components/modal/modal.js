@@ -13,14 +13,15 @@ export default class Modal extends Component {
   // 여러 모달이 동시에 열려도 마지막 모달이 닫힐 때만 스크롤을 풀어주기 위한 공유 카운터
   static _scrollLockCount = 0;
 
+  static defaultOptions = {
+    closeOnOverlayClick: true,
+    closeOnEsc: true,
+    onOpen: null,
+    onClose: null,
+  };
+
   constructor(el, userOptions = {}) {
-    const defaultOptions = {
-      closeOnOverlayClick: true,
-      closeOnEsc: true,
-      onOpen: null,
-      onClose: null,
-    };
-    super(el, defaultOptions, userOptions);
+    super(el, userOptions);
     this._releaseFocusTrap = null;
     this._previouslyFocusedEl = null;
     this._isOpen = false;

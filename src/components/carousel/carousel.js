@@ -27,15 +27,16 @@ export default class Carousel extends Component {
 
   static SWIPE_THRESHOLD = 50;
 
+  static defaultOptions = {
+    autoplay: false,
+    interval: 3000,
+    loop: true,
+    startIndex: 0,
+    onChange: null,
+  };
+
   constructor(el, userOptions = {}) {
-    const defaultOptions = {
-      autoplay: false,
-      interval: 3000,
-      loop: true,
-      startIndex: 0,
-      onChange: null,
-    };
-    super(el, defaultOptions, userOptions);
+    super(el, userOptions);
 
     this._track = this.el.querySelector(':scope > .carousel-track');
     this._slides = [...this._track.querySelectorAll(':scope > .carousel-slide')];

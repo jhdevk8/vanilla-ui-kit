@@ -15,19 +15,20 @@ import Component from '../../core/Component.js';
 export default class Toast extends Component {
   static eventNamespace = 'toast';
 
-  constructor(userOptions = {}) {
-    const defaultOptions = {
-      position: 'top-right',
-      duration: 3000,
-      maxVisible: 3,
-    };
-    const options = { ...defaultOptions, ...userOptions };
+  static defaultOptions = {
+    position: 'top-right',
+    duration: 3000,
+    maxVisible: 3,
+  };
 
+  constructor(userOptions = {}) {
+    // super() 호출 전에는 this.options가 없으므로 position만 직접 꺼내 컨테이너를 만든다
+    const position = userOptions.position ?? Toast.defaultOptions.position;
     const container = document.createElement('div');
-    container.className = `toast-container toast-container--${options.position}`;
+    container.className = `toast-container toast-container--${position}`;
     document.body.appendChild(container);
 
-    super(container, defaultOptions, userOptions);
+    super(container, userOptions);
 
     this._idSeq = 0;
     this._visible = new Map(); // id -> { el, timerId } — Map은 삽입 순서를 유지하므로 첫 항목이 가장 오래된 토스트
