@@ -30,13 +30,12 @@ export default class Toast extends Component {
     super(container, defaultOptions, userOptions);
 
     this._idSeq = 0;
-    this._visible = new Map(); // id -> { el, timerId }
-    this._queue = [];
+    this._visible = new Map(); // id -> { el, timerId } — Map은 삽입 순서를 유지하므로 첫 항목이 가장 오래된 토스트
     this._timers = new Set();
   }
 
   /**
-   * 토스트를 표시한다. 현재 보이는 개수가 maxVisible을 넘으면 큐에 대기시킨다.
+   * 토스트를 표시한다. 보이는 개수가 maxVisible을 넘으면 가장 오래된 토스트부터 밀어낸다.
    * @returns {string} 생성된 토스트의 고유 id (dismiss()에 사용)
    */
   show(message, itemOptions = {}) {
@@ -45,12 +44,10 @@ export default class Toast extends Component {
     const duration =
       itemOptions.duration !== undefined ? itemOptions.duration : this.options.duration;
 
-    const item = { id, message, type, duration };
+    this._renderToast({ id, message, type, duration });
 
-    if (this._visible.size >= this.options.maxVisible) {
-      this._queue.push(item);
-    } else {
-      this._renderToast(item);
+    while (this._visible.size > this.options.maxVisible) {
+      this.dismiss(this._visible.keys().next().value);
     }
 
     return id;
@@ -58,40 +55,18 @@ export default class Toast extends Component {
 
   /**
    * 특정 토스트를 사라짐 애니메이션 후 DOM에서 제거한다.
-   * 아직 큐에 대기 중인 토스트라면 큐에서만 제거한다.
    */
   dismiss(id) {
     const visible = this._visible.get(id);
     if (visible) {
       this._removeVisible(id, visible);
-      return;
     }
-
-    const queueIndex = this._queue.findIndex((item) => item.id === id);
-    if (queueIndex !== -1) {
-      this._queue.splice(queueIndex, 1);
-    }
-  }
-
-  /**
-   * 화면에 보이는 토스트와 대기 큐를 전부 제거한다 (애니메이션 없이 즉시).
-   */
-  clear() {
-    this._queue = [];
-
-    [...this._visible.entries()].forEach(([id, { el, timerId }]) => {
-      this._clearTimer(timerId);
-      el.remove();
-      this._visible.delete(id);
-      this.emit('dismiss', { id });
-    });
   }
 
   destroy() {
     this._timers.forEach((timerId) => clearTimeout(timerId));
     this._timers.clear();
     this._visible.clear();
-    this._queue = [];
     this.el.remove();
     super.destroy();
   }
@@ -119,7 +94,10 @@ export default class Toast extends Component {
 
     // 삽입 직후 바로 클래스를 주면 트랜지션이 시작되지 않으므로 다음 프레임까지 대기
     requestAnimationFrame(() => {
-      requestAnimationFrame(() => el.classList.add('is-visible'));
+      // 등장 전에 밀려난 토스트(maxVisible 초과)에는 is-visible을 다시 붙이지 않음
+      requestAnimationFrame(() => {
+        if (this._visible.has(id)) el.classList.add('is-visible');
+      });
     });
 
     let timerId = null;
@@ -146,7 +124,6 @@ export default class Toast extends Component {
       el.removeEventListener('transitionend', onTransitionEnd);
       el.remove();
       this.emit('dismiss', { id });
-      this._processQueue();
     };
 
     const onTransitionEnd = (e) => {
@@ -161,12 +138,6 @@ export default class Toast extends Component {
     } else {
       finish();
     }
-  }
-
-  _processQueue() {
-    if (this._queue.length === 0) return;
-    if (this._visible.size >= this.options.maxVisible) return;
-    this._renderToast(this._queue.shift());
   }
 
   _setTimer(fn, delay) {
