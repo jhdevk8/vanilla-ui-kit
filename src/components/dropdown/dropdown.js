@@ -1,4 +1,5 @@
 import Component from '../../core/Component.js';
+import { qs, qsa } from '../../utils/dom.js';
 import { getNavigationIndex } from '../../utils/a11y.js';
 
 /**
@@ -33,8 +34,8 @@ export default class Dropdown extends Component {
   constructor(el, userOptions = {}) {
     super(el, userOptions);
 
-    this._trigger = this.el.querySelector(':scope > .dropdown-trigger');
-    this._list = this.el.querySelector(':scope > .dropdown-list');
+    this._trigger = qs(':scope > .dropdown-trigger', this.el);
+    this._list = qs(':scope > .dropdown-list', this.el);
 
     this._isOpen = false;
     this._highlightedIndex = -1;
@@ -63,7 +64,7 @@ export default class Dropdown extends Component {
       });
     }
 
-    this._options = [...this._list.querySelectorAll(':scope > .dropdown-option')].map(
+    this._options = qsa(':scope > .dropdown-option', this._list).map(
       (optionEl, index) => {
         if (!optionEl.id) {
           optionEl.id = `${this.el.id || 'dropdown'}-option-${index}`;

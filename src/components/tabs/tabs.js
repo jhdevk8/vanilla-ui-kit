@@ -1,4 +1,5 @@
 import Component from '../../core/Component.js';
+import { qsa } from '../../utils/dom.js';
 import { getNavigationIndex } from '../../utils/a11y.js';
 
 /**
@@ -28,8 +29,8 @@ export default class Tabs extends Component {
   constructor(el, userOptions = {}) {
     super(el, userOptions);
 
-    this._tabs = [...this.el.querySelectorAll(':scope > .tabs-list > .tabs-tab')];
-    this._panels = [...this.el.querySelectorAll(':scope > .tabs-panel')];
+    this._tabs = qsa(':scope > .tabs-list > .tabs-tab', this.el);
+    this._panels = qsa(':scope > .tabs-panel', this.el);
     this._activeIndex = null;
 
     this._init();

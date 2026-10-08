@@ -1,4 +1,5 @@
 import Component from '../../core/Component.js';
+import { qs, qsa } from '../../utils/dom.js';
 
 /**
  * Carousel 컴포넌트
@@ -19,7 +20,7 @@ import Component from '../../core/Component.js';
  * .carousel-indicators가 없거나 .carousel-dot 개수가 슬라이드 개수와 다르면
  * 슬라이드 개수만큼 dot을 동적으로 생성한다.
  *
- * 스와이프: 마우스(포인터)/터치 드래그 거리가 50px를 넘으면 방향에 따라 next()/prev()를 호출한다.
+ * 스와이프: 포인터(마우스·터치) 드래그 거리가 50px를 넘으면 방향에 따라 next()/prev()를 호출한다.
  * 자동재생: hover 중이거나 드래그 중일 때는 일시 정지하고, 벗어나면 재개한다.
  */
 export default class Carousel extends Component {
@@ -38,11 +39,11 @@ export default class Carousel extends Component {
   constructor(el, userOptions = {}) {
     super(el, userOptions);
 
-    this._track = this.el.querySelector(':scope > .carousel-track');
-    this._slides = [...this._track.querySelectorAll(':scope > .carousel-slide')];
-    this._prevBtn = this.el.querySelector(':scope > .carousel-prev');
-    this._nextBtn = this.el.querySelector(':scope > .carousel-next');
-    this._indicatorsEl = this.el.querySelector(':scope > .carousel-indicators');
+    this._track = qs(':scope > .carousel-track', this.el);
+    this._slides = qsa(':scope > .carousel-slide', this._track);
+    this._prevBtn = qs(':scope > .carousel-prev', this.el);
+    this._nextBtn = qs(':scope > .carousel-next', this.el);
+    this._indicatorsEl = qs(':scope > .carousel-indicators', this.el);
 
     this._currentIndex = 0;
     this._timerId = null;
@@ -63,7 +64,7 @@ export default class Carousel extends Component {
       this.el.appendChild(this._indicatorsEl);
     }
 
-    const existingDots = [...this._indicatorsEl.querySelectorAll(':scope > .carousel-dot')];
+    const existingDots = qsa(':scope > .carousel-dot', this._indicatorsEl);
     if (existingDots.length !== this._slides.length) {
       this._indicatorsEl.innerHTML = '';
       this._slides.forEach((_, index) => {
@@ -75,7 +76,7 @@ export default class Carousel extends Component {
       });
     }
 
-    this._dots = [...this._indicatorsEl.querySelectorAll(':scope > .carousel-dot')];
+    this._dots = qsa(':scope > .carousel-dot', this._indicatorsEl);
   }
 
   _init() {
@@ -88,10 +89,8 @@ export default class Carousel extends Component {
     this._on(this.el, 'mouseenter', () => this._handleHoverStart());
     this._on(this.el, 'mouseleave', () => this._handleHoverEnd());
 
-    this._on(this._track, 'touchstart', (e) => this._handleDragStart(e.touches[0].clientX));
-    this._on(this._track, 'touchmove', (e) => this._handleDragMove(e.touches[0].clientX));
-    this._on(this._track, 'touchend', () => this._handleDragEnd());
-
+    // Pointer Events가 마우스·터치·펜을 모두 처리하므로 touch* 이벤트는 따로 받지 않는다
+    // (터치 시 세로 스크롤은 CSS의 touch-action: pan-y로 브라우저에 맡김)
     this._on(this._track, 'pointerdown', (e) => this._handlePointerDown(e));
     this._on(this._track, 'pointermove', (e) => this._handleDragMove(e.clientX));
     this._on(this._track, 'pointerup', (e) => this._handlePointerUp(e));

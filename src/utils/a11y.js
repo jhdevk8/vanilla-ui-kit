@@ -1,3 +1,5 @@
+import { qsa } from './dom.js';
+
 const FOCUSABLE_SELECTOR =
   'a[href], button:not([disabled]), textarea:not([disabled]), input:not([disabled]), select:not([disabled]), [tabindex]:not([tabindex="-1"])';
 
@@ -7,7 +9,7 @@ const FOCUSABLE_SELECTOR =
  * @returns {() => void} cleanup 함수
  */
 export function trapFocus(container) {
-  const focusable = [...container.querySelectorAll(FOCUSABLE_SELECTOR)];
+  const focusable = qsa(FOCUSABLE_SELECTOR, container);
   if (focusable.length === 0) return () => {};
 
   const first = focusable[0];
@@ -56,13 +58,4 @@ export function getNavigationIndex(key, currentIndex, count, { prevKey, nextKey 
     default:
       return null;
   }
-}
-
-// 스크린리더 전용 텍스트 요소 생성 (필요시 사용)
-export function createSrOnly(text) {
-  const el = document.createElement('span');
-  el.textContent = text;
-  el.style.cssText =
-    'position:absolute;width:1px;height:1px;padding:0;margin:-1px;overflow:hidden;clip:rect(0,0,0,0);white-space:nowrap;border:0;';
-  return el;
 }

@@ -27,7 +27,7 @@ DOM 조작, 포커스 트랩, 키보드 내비게이션 같은 기본기를 직�
 | **Tabs** | 탭 전환, 방향키 기반 roving tabindex 내비게이션 |
 | **Dropdown** | 커스텀 셀렉트, 방향키 하이라이트 이동, 옵션 선택 |
 | **Carousel** | 슬라이드 전환, 이전/다음 컨트롤, 인디케이터 |
-| **Toast** | body에 마운트되는 알림 컨테이너, 자동 소멸(auto-dismiss) |
+| **Toast** | body에 마운트되는 알림 컨테이너, 자동 소멸(auto-dismiss), 최대 개수 초과 시 오래된 알림부터 제거 |
 
 ## 사용법 (Modal 예시)
 
@@ -67,7 +67,8 @@ document.querySelector('#myModal').addEventListener('modal:open', (e) => {
 ## 설계 원칙
 
 - **공통 베이스 클래스 상속** — 모든 컴포넌트는 `src/core/Component.js`의 `Component`를 상속합니다.
-  옵션 병합, 리스너 등록/추적, `destroy()` 시 일괄 해제 로직을 베이스 클래스에서 공통으로 처리합니다.
+  각 컴포넌트는 `static defaultOptions`로 기본값만 선언하고, 사용자 옵션과의 병합, 리스너 등록/추적,
+  `destroy()` 시 일괄 해제 로직은 베이스 클래스에서 공통으로 처리합니다.
 - **커스텀 이벤트 + 콜백 옵션 동시 지원** — 상태 변화는 `emit('open')` 호출 한 번으로
   `컴포넌트명:동사` 형태의 `CustomEvent`(예: `modal:open`)를 발행함과 동시에, 옵션으로 전달한
   `onOpen` 같은 콜백도 함께 호출합니다. 이벤트 위임과 직접 콜백 등록 양쪽 스타일을 모두 지원하기 위함입니다.
@@ -128,8 +129,8 @@ vanilla-ui-kit/
 │   ├── core/
 │   │   └── Component.js    # 모든 컴포넌트의 베이스 클래스
 │   ├── utils/
-│   │   ├── dom.js          # qs, qsa, delegate, cx
-│   │   └── a11y.js         # trapFocus 등 접근성 헬퍼
+│   │   ├── dom.js          # qs, qsa 셀렉터 헬퍼
+│   │   └── a11y.js         # trapFocus, getNavigationIndex(방향키 내비게이션)
 │   └── styles/
 │       └── tokens.css      # 디자인 토큰 (CSS 변수)
 └── docs/                    # 컴포넌트별 개별 데모 페이지

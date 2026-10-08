@@ -1,4 +1,5 @@
 import Component from '../../core/Component.js';
+import { qs, qsa } from '../../utils/dom.js';
 import { getNavigationIndex } from '../../utils/a11y.js';
 
 /**
@@ -25,9 +26,9 @@ export default class Accordion extends Component {
   constructor(el, userOptions = {}) {
     super(el, userOptions);
 
-    this._items = [...this.el.querySelectorAll(':scope > .accordion-item')];
-    this._triggers = this._items.map((item) => item.querySelector('.accordion-trigger'));
-    this._panels = this._items.map((item) => item.querySelector('.accordion-panel'));
+    this._items = qsa(':scope > .accordion-item', this.el);
+    this._triggers = this._items.map((item) => qs('.accordion-trigger', item));
+    this._panels = this._items.map((item) => qs('.accordion-panel', item));
     this._transitionCleanups = new Map();
 
     this._init();
