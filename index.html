@@ -598,11 +598,11 @@
     // ---------- Carousel ----------
     const carousel = new Carousel('#myCarousel', {
       autoplay: true,
-      interval: 3000,
+      interval: 2000,
       loop: true,
       startIndex: 0,
     });
-    document.getElementById('carouselPlayBtn').addEventListener('click', () => carousel.play());
+    document.getElementById('carouselPlayBtn').addEventListener('click', () => carousel.play({ immediate: true }));
     document.getElementById('carouselPauseBtn').addEventListener('click', () => carousel.pause());
 
     // ---------- Toast ----------

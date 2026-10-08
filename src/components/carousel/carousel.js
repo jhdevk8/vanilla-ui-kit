@@ -133,8 +133,11 @@ export default class Carousel extends Component {
     this.goTo(this._currentIndex - 1);
   }
 
-  play() {
+  // immediate: 정지 상태에서 재생할 때 interval을 기다리지 않고 바로 다음 슬라이드로 넘김
+  play({ immediate = false } = {}) {
+    const wasPlaying = this._isPlaying;
     this._isPlaying = true;
+    if (immediate && !wasPlaying) this.next();
     this._startTimer();
   }
 
