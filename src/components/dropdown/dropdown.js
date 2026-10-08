@@ -1,4 +1,5 @@
 import Component from '../../core/Component.js';
+import { getNavigationIndex } from '../../utils/a11y.js';
 
 /**
  * Dropdown 컴포넌트
@@ -152,23 +153,17 @@ export default class Dropdown extends Component {
       return;
     }
 
+    const nextIndex = getNavigationIndex(e.key, this._highlightedIndex, this._options.length, {
+      prevKey: 'ArrowUp',
+      nextKey: 'ArrowDown',
+    });
+    if (nextIndex !== null) {
+      e.preventDefault();
+      this._setHighlight(nextIndex);
+      return;
+    }
+
     switch (e.key) {
-      case 'ArrowDown':
-        e.preventDefault();
-        this._moveHighlight(1);
-        break;
-      case 'ArrowUp':
-        e.preventDefault();
-        this._moveHighlight(-1);
-        break;
-      case 'Home':
-        e.preventDefault();
-        this._setHighlight(0);
-        break;
-      case 'End':
-        e.preventDefault();
-        this._setHighlight(this._options.length - 1);
-        break;
       case 'Enter':
       case ' ':
       case 'Spacebar':
@@ -212,13 +207,6 @@ export default class Dropdown extends Component {
     const current = this._options[this._highlightedIndex];
     if (current) current.el.classList.remove('is-highlighted');
     this._highlightedIndex = -1;
-  }
-
-  _moveHighlight(delta) {
-    const count = this._options.length;
-    if (count === 0) return;
-    const nextIndex = (this._highlightedIndex + delta + count) % count;
-    this._setHighlight(nextIndex);
   }
 
   _selectHighlighted() {

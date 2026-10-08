@@ -1,4 +1,5 @@
 import Component from '../../core/Component.js';
+import { getNavigationIndex } from '../../utils/a11y.js';
 
 /**
  * Accordion 컴포넌트
@@ -46,25 +47,11 @@ export default class Accordion extends Component {
   }
 
   _handleKeydown(e, index) {
-    const count = this._triggers.length;
-    let nextIndex = null;
-
-    switch (e.key) {
-      case 'ArrowDown':
-        nextIndex = (index + 1) % count;
-        break;
-      case 'ArrowUp':
-        nextIndex = (index - 1 + count) % count;
-        break;
-      case 'Home':
-        nextIndex = 0;
-        break;
-      case 'End':
-        nextIndex = count - 1;
-        break;
-      default:
-        return;
-    }
+    const nextIndex = getNavigationIndex(e.key, index, this._triggers.length, {
+      prevKey: 'ArrowUp',
+      nextKey: 'ArrowDown',
+    });
+    if (nextIndex === null) return;
 
     e.preventDefault();
     this._triggers[nextIndex].focus();

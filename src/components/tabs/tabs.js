@@ -1,4 +1,5 @@
 import Component from '../../core/Component.js';
+import { getNavigationIndex } from '../../utils/a11y.js';
 
 /**
  * Tabs 컴포넌트
@@ -44,25 +45,11 @@ export default class Tabs extends Component {
   }
 
   _handleKeydown(e, index) {
-    const count = this._tabs.length;
-    let nextIndex = null;
-
-    switch (e.key) {
-      case 'ArrowRight':
-        nextIndex = (index + 1) % count;
-        break;
-      case 'ArrowLeft':
-        nextIndex = (index - 1 + count) % count;
-        break;
-      case 'Home':
-        nextIndex = 0;
-        break;
-      case 'End':
-        nextIndex = count - 1;
-        break;
-      default:
-        return;
-    }
+    const nextIndex = getNavigationIndex(e.key, index, this._tabs.length, {
+      prevKey: 'ArrowLeft',
+      nextKey: 'ArrowRight',
+    });
+    if (nextIndex === null) return;
 
     e.preventDefault();
     this._tabs[nextIndex].focus();
