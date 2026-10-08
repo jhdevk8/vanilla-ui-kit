@@ -133,63 +133,8 @@
       background: var(--color-bg);
     }
 
-    pre {
-      margin: 0;
-      background: var(--color-surface);
-      border: 1px solid var(--color-border);
-      border-radius: var(--radius-md);
-      padding: var(--space-md);
-      overflow-x: auto;
-      font-size: var(--font-size-sm);
-    }
-
     code {
       font-family: ui-monospace, SFMono-Regular, Consolas, monospace;
-    }
-
-    table.api-table {
-      width: 100%;
-      border-collapse: collapse;
-      font-size: var(--font-size-sm);
-    }
-
-    table.api-table caption {
-      text-align: left;
-      font-size: var(--font-size-sm);
-      font-weight: 600;
-      color: var(--color-text-muted);
-      margin-bottom: var(--space-xs);
-    }
-
-    table.api-table th,
-    table.api-table td {
-      text-align: left;
-      padding: var(--space-sm);
-      border-bottom: 1px solid var(--color-border);
-      vertical-align: top;
-    }
-
-    table.api-table th {
-      color: var(--color-text-muted);
-      font-weight: 600;
-    }
-
-    table.api-table + table.api-table {
-      margin-top: var(--space-lg);
-    }
-
-    .demo-log {
-      margin-top: var(--space-md);
-      padding: var(--space-md);
-      background: var(--color-surface);
-      border: 1px solid var(--color-border);
-      border-radius: var(--radius-md);
-      font-family: ui-monospace, monospace;
-      font-size: var(--font-size-sm);
-      min-height: 4em;
-      max-height: 10em;
-      overflow-y: auto;
-      white-space: pre-wrap;
     }
 
     button, .btn {
@@ -377,11 +322,6 @@
       .demo-block {
         padding: var(--space-md);
       }
-
-      table.api-table td,
-      table.api-table th {
-        overflow-wrap: anywhere;
-      }
     }
   </style>
 </head>
@@ -444,44 +384,7 @@
               </div>
             </div>
           </div>
-
-          <div class="demo-log" id="modalLog">이벤트 로그가 여기에 표시됩니다.</div>
         </div>
-
-        <h3>초기화 코드</h3>
-        <pre><code>const modal = new Modal('#demoModal', {
-  closeOnEsc: true,
-  closeOnOverlayClick: true,
-  onOpen: () => {},
-  onClose: () => {},
-});
-
-modal.open();
-modal.close();
-modal.toggle();</code></pre>
-
-        <h3>Options</h3>
-        <table class="api-table">
-          <thead>
-            <tr><th>이름</th><th>타입 / 기본값</th><th>설명</th></tr>
-          </thead>
-          <tbody>
-            <tr><td>closeOnOverlayClick</td><td>boolean, 기본 true</td><td>오버레이(배경) 클릭 시 모달을 닫을지 여부</td></tr>
-            <tr><td>closeOnEsc</td><td>boolean, 기본 true</td><td>ESC 키 입력 시 모달을 닫을지 여부</td></tr>
-            <tr><td>onOpen / onClose</td><td>function</td><td>모달이 열리거나 닫힐 때 호출되는 콜백</td></tr>
-          </tbody>
-        </table>
-
-        <h3>Events</h3>
-        <table class="api-table">
-          <thead>
-            <tr><th>이벤트명</th><th>detail</th><th>설명</th></tr>
-          </thead>
-          <tbody>
-            <tr><td>modal:open</td><td>—</td><td>모달이 열렸을 때 발행</td></tr>
-            <tr><td>modal:close</td><td>—</td><td>모달이 닫혔을 때 발행</td></tr>
-          </tbody>
-        </table>
       </section>
 
       <!-- ===================== Accordion ===================== -->
@@ -538,41 +441,7 @@ modal.toggle();</code></pre>
               </div>
             </div>
           </div>
-
-          <div class="demo-log" id="accordionLog">이벤트 로그가 여기에 표시됩니다.</div>
         </div>
-
-        <h3>초기화 코드</h3>
-        <pre><code>const accordion = new Accordion('#myAccordion', {
-  multiple: false,
-  defaultOpen: 0,
-  onToggle: ({ index, isOpen }) => {},
-});
-
-accordion.open(index);
-accordion.close(index);
-accordion.toggle(index);</code></pre>
-
-        <h3>Options</h3>
-        <table class="api-table">
-          <thead>
-            <tr><th>이름</th><th>타입 / 기본값</th><th>설명</th></tr>
-          </thead>
-          <tbody>
-            <tr><td>multiple</td><td>boolean, 기본 false</td><td>여러 항목을 동시에 열어둘 수 있는지 여부</td></tr>
-            <tr><td>defaultOpen</td><td>number | number[]</td><td>초기에 열려 있을 항목의 인덱스(들)</td></tr>
-          </tbody>
-        </table>
-
-        <h3>Events</h3>
-        <table class="api-table">
-          <thead>
-            <tr><th>이벤트명</th><th>detail</th><th>설명</th></tr>
-          </thead>
-          <tbody>
-            <tr><td>accordion:toggle</td><td>{ index, isOpen }</td><td>항목이 열리거나 닫힐 때 발행</td></tr>
-          </tbody>
-        </table>
       </section>
 
       <!-- ===================== Tabs ===================== -->
@@ -601,38 +470,7 @@ accordion.toggle(index);</code></pre>
               옮기면 별도의 Enter/Space 없이 즉시 해당 패널이 활성화됩니다.
             </div>
           </div>
-
-          <div class="demo-log" id="tabsLog">이벤트 로그가 여기에 표시됩니다.</div>
         </div>
-
-        <h3>초기화 코드</h3>
-        <pre><code>const tabs = new Tabs('#myTabs', {
-  activeIndex: 0,
-  onChange: ({ index }) => {},
-});
-
-tabs.select(index);</code></pre>
-
-        <h3>Options</h3>
-        <table class="api-table">
-          <thead>
-            <tr><th>이름</th><th>타입 / 기본값</th><th>설명</th></tr>
-          </thead>
-          <tbody>
-            <tr><td>activeIndex</td><td>number, 기본 0</td><td>초기에 활성화될 탭의 인덱스</td></tr>
-            <tr><td>onChange</td><td>function</td><td>활성 탭이 바뀔 때 호출되는 콜백</td></tr>
-          </tbody>
-        </table>
-
-        <h3>Events</h3>
-        <table class="api-table">
-          <thead>
-            <tr><th>이벤트명</th><th>detail</th><th>설명</th></tr>
-          </thead>
-          <tbody>
-            <tr><td>tabs:change</td><td>{ index }</td><td>활성 탭이 바뀌었을 때 발행</td></tr>
-          </tbody>
-        </table>
       </section>
 
       <!-- ===================== Dropdown ===================== -->
@@ -653,45 +491,7 @@ tabs.select(index);</code></pre>
             </button>
             <ul class="dropdown-list" role="listbox" aria-labelledby="dropdown-btn" hidden></ul>
           </div>
-
-          <div class="demo-log" id="dropdownLog">이벤트 로그가 여기에 표시됩니다.</div>
         </div>
-
-        <h3>초기화 코드</h3>
-        <pre><code>const dropdown = new Dropdown('#myDropdown', {
-  options: [
-    { value: 'apple', label: '사과' },
-    { value: 'banana', label: '바나나' },
-  ],
-  placeholder: '과일을 선택하세요',
-  onSelect: ({ value, label }) => {},
-});
-
-dropdown.select(value);
-dropdown.open();
-dropdown.close();</code></pre>
-
-        <h3>Options</h3>
-        <table class="api-table">
-          <thead>
-            <tr><th>이름</th><th>타입 / 기본값</th><th>설명</th></tr>
-          </thead>
-          <tbody>
-            <tr><td>options</td><td>array</td><td><code>{ value, label }</code> 형태의 옵션 목록. 주어지지 않으면 마크업에 있는 <code>.dropdown-option</code>을 그대로 사용</td></tr>
-            <tr><td>placeholder</td><td>string</td><td>선택된 값이 없을 때 트리거에 표시할 문구</td></tr>
-            <tr><td>onSelect</td><td>function</td><td>옵션을 선택했을 때 호출되는 콜백</td></tr>
-          </tbody>
-        </table>
-
-        <h3>Events</h3>
-        <table class="api-table">
-          <thead>
-            <tr><th>이벤트명</th><th>detail</th><th>설명</th></tr>
-          </thead>
-          <tbody>
-            <tr><td>dropdown:select</td><td>{ value, label }</td><td>옵션을 선택했을 때 발행</td></tr>
-          </tbody>
-        </table>
       </section>
 
       <!-- ===================== Carousel ===================== -->
@@ -718,48 +518,7 @@ dropdown.close();</code></pre>
             <button id="carouselPlayBtn" type="button">play()</button>
             <button id="carouselPauseBtn" type="button">pause()</button>
           </div>
-
-          <div class="demo-log" id="carouselLog">이벤트 로그가 여기에 표시됩니다.</div>
         </div>
-
-        <h3>초기화 코드</h3>
-        <pre><code>const carousel = new Carousel('#myCarousel', {
-  autoplay: true,
-  interval: 3000,
-  loop: true,
-  startIndex: 0,
-  onChange: ({ index }) => {},
-});
-
-carousel.next();
-carousel.prev();
-carousel.goTo(index);
-carousel.play();
-carousel.pause();</code></pre>
-
-        <h3>Options</h3>
-        <table class="api-table">
-          <thead>
-            <tr><th>이름</th><th>타입 / 기본값</th><th>설명</th></tr>
-          </thead>
-          <tbody>
-            <tr><td>autoplay</td><td>boolean, 기본 false</td><td>생성 직후 자동재생을 시작할지 여부</td></tr>
-            <tr><td>interval</td><td>number, 기본 3000</td><td>자동재생 슬라이드 전환 간격(ms)</td></tr>
-            <tr><td>loop</td><td>boolean, 기본 true</td><td>마지막 슬라이드에서 다음으로 넘길 때 처음으로 순환할지 여부</td></tr>
-            <tr><td>startIndex</td><td>number, 기본 0</td><td>초기에 표시할 슬라이드 인덱스</td></tr>
-            <tr><td>onChange</td><td>function</td><td>슬라이드가 바뀔 때 호출되는 콜백</td></tr>
-          </tbody>
-        </table>
-
-        <h3>Events</h3>
-        <table class="api-table">
-          <thead>
-            <tr><th>이벤트명</th><th>detail</th><th>설명</th></tr>
-          </thead>
-          <tbody>
-            <tr><td>carousel:change</td><td>{ index }</td><td>슬라이드가 바뀌었을 때 발행</td></tr>
-          </tbody>
-        </table>
       </section>
 
       <!-- ===================== Toast ===================== -->
@@ -788,56 +547,7 @@ carousel.pause();</code></pre>
             <button id="toastPersistentBtn" type="button">수동 dismiss 토스트 (duration: 0)</button>
             <button id="toastClearBtn" type="button">clear() 전부 지우기</button>
           </div>
-
-          <div class="demo-log" id="toastLog">이벤트 로그가 여기에 표시됩니다.</div>
         </div>
-
-        <h3>초기화 코드</h3>
-        <pre><code>const toast = new Toast({
-  position: 'top-right',
-  duration: 3000,
-  maxVisible: 3,
-});
-
-toast.show('저장되었습니다', { type: 'success' });
-const id = toast.show('처리 중...', { type: 'info', duration: 0 }); // duration 0 → 수동 dismiss 전까지 유지
-toast.dismiss(id);
-toast.clear();</code></pre>
-
-        <h3>Options</h3>
-        <table class="api-table">
-          <thead>
-            <tr><th>이름</th><th>타입 / 기본값</th><th>설명</th></tr>
-          </thead>
-          <tbody>
-            <tr><td>position</td><td>string, 기본 'top-right'</td><td>컨테이너 위치. top/bottom × left/center/right 조합 6가지</td></tr>
-            <tr><td>duration</td><td>number, 기본 3000</td><td>토스트가 자동으로 사라지기까지의 시간(ms). 개별 show()에서 오버라이드 가능</td></tr>
-            <tr><td>maxVisible</td><td>number, 기본 3</td><td>동시에 표시할 수 있는 최대 토스트 개수. 초과분은 큐에서 대기</td></tr>
-          </tbody>
-        </table>
-
-        <h3>Methods</h3>
-        <table class="api-table">
-          <thead>
-            <tr><th>이름</th><th>설명</th></tr>
-          </thead>
-          <tbody>
-            <tr><td>show(message, itemOptions)</td><td>토스트를 표시(또는 큐잉)하고 고유 id를 반환. itemOptions로 type('success'|'error'|'info'|'warning')과 duration을 개별 지정 가능</td></tr>
-            <tr><td>dismiss(id)</td><td>특정 토스트를 사라짐 애니메이션 후 제거. 큐에 대기 중이면 큐에서 제거</td></tr>
-            <tr><td>clear()</td><td>화면에 보이는 토스트와 대기 큐를 전부 제거</td></tr>
-          </tbody>
-        </table>
-
-        <h3>Events</h3>
-        <table class="api-table">
-          <thead>
-            <tr><th>이벤트명</th><th>detail</th><th>설명</th></tr>
-          </thead>
-          <tbody>
-            <tr><td>toast:show</td><td>{ id }</td><td>토스트가 화면에 표시됐을 때 발행</td></tr>
-            <tr><td>toast:dismiss</td><td>{ id }</td><td>토스트가 제거됐을 때 발행</td></tr>
-          </tbody>
-        </table>
       </section>
     </main>
   </div>
@@ -850,68 +560,29 @@ toast.clear();</code></pre>
     import Carousel from './src/components/carousel/carousel.js';
     import Toast from './src/components/toast/toast.js';
 
-    // ---------- 공통 로그 유틸 ----------
-    function createLogger(logElId) {
-      const logEl = document.getElementById(logElId);
-      return (message) => {
-        const time = new Date().toLocaleTimeString();
-        logEl.textContent = `[${time}] ${message}\n` + logEl.textContent;
-      };
-    }
-
     // ---------- Modal ----------
-    const modalLog = createLogger('modalLog');
     const modal = new Modal('#demoModal', {
       closeOnEsc: true,
       closeOnOverlayClick: true,
-      onOpen: () => modalLog('onOpen 콜백 호출됨'),
-      onClose: () => modalLog('onClose 콜백 호출됨'),
-    });
-    document.getElementById('demoModal').addEventListener('modal:open', () => {
-      modalLog('modal:open 커스텀 이벤트 발생');
-    });
-    document.getElementById('demoModal').addEventListener('modal:close', () => {
-      modalLog('modal:close 커스텀 이벤트 발생');
     });
     document.getElementById('openModalBtn').addEventListener('click', () => modal.open());
     document.getElementById('modalCloseBtn').addEventListener('click', () => modal.close());
     document.getElementById('modalCancelBtn').addEventListener('click', () => modal.close());
-    document.getElementById('modalConfirmBtn').addEventListener('click', () => {
-      modalLog('확인 버튼 클릭 — 모달 닫음');
-      modal.close();
-    });
+    document.getElementById('modalConfirmBtn').addEventListener('click', () => modal.close());
 
     // ---------- Accordion ----------
-    const accordionLog = createLogger('accordionLog');
     const accordion = new Accordion('#myAccordion', {
       multiple: false,
       defaultOpen: 0,
-      onToggle: ({ index, isOpen }) => {
-        accordionLog(`onToggle 콜백 — index: ${index}, isOpen: ${isOpen}`);
-      },
-    });
-    document.getElementById('myAccordion').addEventListener('accordion:toggle', (e) => {
-      accordionLog(`accordion:toggle 커스텀 이벤트 — index: ${e.detail.index}, isOpen: ${e.detail.isOpen}`);
     });
     document.getElementById('accordionMultipleToggle').addEventListener('change', (e) => {
       accordion.options.multiple = e.target.checked;
-      accordionLog(`multiple 옵션 변경 → ${e.target.checked}`);
     });
 
     // ---------- Tabs ----------
-    const tabsLog = createLogger('tabsLog');
-    const tabs = new Tabs('#myTabs', {
-      activeIndex: 0,
-      onChange: ({ index }) => {
-        tabsLog(`onChange 콜백 — index: ${index}`);
-      },
-    });
-    document.getElementById('myTabs').addEventListener('tabs:change', (e) => {
-      tabsLog(`tabs:change 커스텀 이벤트 — index: ${e.detail.index}`);
-    });
+    const tabs = new Tabs('#myTabs', { activeIndex: 0 });
 
     // ---------- Dropdown ----------
-    const dropdownLog = createLogger('dropdownLog');
     const dropdown = new Dropdown('#myDropdown', {
       options: [
         { value: 'apple', label: '사과' },
@@ -922,46 +593,24 @@ toast.clear();</code></pre>
         { value: 'watermelon', label: '수박' },
       ],
       placeholder: '과일을 선택하세요',
-      onSelect: ({ value, label }) => {
-        dropdownLog(`onSelect 콜백 — value: ${value}, label: ${label}`);
-      },
-    });
-    document.getElementById('myDropdown').addEventListener('dropdown:select', (e) => {
-      dropdownLog(`dropdown:select 커스텀 이벤트 — value: ${e.detail.value}, label: ${e.detail.label}`);
     });
 
     // ---------- Carousel ----------
-    const carouselLog = createLogger('carouselLog');
     const carousel = new Carousel('#myCarousel', {
       autoplay: true,
       interval: 3000,
       loop: true,
       startIndex: 0,
-      onChange: ({ index }) => {
-        carouselLog(`onChange 콜백 — index: ${index}`);
-      },
-    });
-    document.getElementById('myCarousel').addEventListener('carousel:change', (e) => {
-      carouselLog(`carousel:change 커스텀 이벤트 — index: ${e.detail.index}`);
     });
     document.getElementById('carouselPlayBtn').addEventListener('click', () => carousel.play());
     document.getElementById('carouselPauseBtn').addEventListener('click', () => carousel.pause());
 
     // ---------- Toast ----------
-    const toastLog = createLogger('toastLog');
     let toast = new Toast({ position: 'top-right', duration: 3000, maxVisible: 3 });
-    function bindToastEvents() {
-      toast.el.addEventListener('toast:show', (e) => toastLog(`toast:show — id: ${e.detail.id}`));
-      toast.el.addEventListener('toast:dismiss', (e) => toastLog(`toast:dismiss — id: ${e.detail.id}`));
-    }
-    bindToastEvents();
 
     document.getElementById('toastPositionSelect').addEventListener('change', (e) => {
-      const position = e.target.value;
       toast.destroy();
-      toast = new Toast({ position, duration: 3000, maxVisible: 3 });
-      bindToastEvents();
-      toastLog(`컨테이너 위치를 ${position}(으)로 변경`);
+      toast = new Toast({ position: e.target.value, duration: 3000, maxVisible: 3 });
     });
 
     document.getElementById('toastSuccessBtn').addEventListener('click', () => {
@@ -979,7 +628,6 @@ toast.clear();</code></pre>
         { message: '다섯 번째 알림 (큐 대기)', type: 'info' },
       ];
       messages.forEach(({ message, type }) => toast.show(message, { type }));
-      toastLog('5개 토스트 요청 — maxVisible(3) 초과분은 큐에서 대기 후 순서대로 표시됩니다.');
     });
     let persistentToastId = null;
     document.getElementById('toastPersistentBtn').addEventListener('click', () => {
@@ -989,12 +637,10 @@ toast.clear();</code></pre>
         return;
       }
       persistentToastId = toast.show('처리 중입니다...', { type: 'info', duration: 0 });
-      toastLog(`수동 dismiss 토스트 생성 — id: ${persistentToastId} (버튼을 다시 누르면 dismiss)`);
     });
     document.getElementById('toastClearBtn').addEventListener('click', () => {
       toast.clear();
       persistentToastId = null;
-      toastLog('clear() 호출 — 보이는 토스트 + 큐 전부 제거');
     });
 
     // ---------- 좌측 네비게이션 + 해시 라우팅 ----------
