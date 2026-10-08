@@ -158,7 +158,8 @@ export default class Accordion extends Component {
     const handleEnd = (e) => {
       if (e.target !== panel || e.propertyName !== 'height') return;
       panel.style.height = 'auto';
-      this._transitionCleanups.delete(panel);
+      // Map 항목만 지우면 리스너가 패널에 남아 다음 열기/닫기 때 다시 실행되므로 리스너까지 해제
+      this._clearPendingTransition(panel);
     };
     panel.addEventListener('transitionend', handleEnd);
     this._transitionCleanups.set(panel, () => panel.removeEventListener('transitionend', handleEnd));
@@ -183,7 +184,7 @@ export default class Accordion extends Component {
       if (e.target !== panel || e.propertyName !== 'height') return;
       panel.hidden = true;
       panel.style.height = '';
-      this._transitionCleanups.delete(panel);
+      this._clearPendingTransition(panel);
     };
     panel.addEventListener('transitionend', handleEnd);
     this._transitionCleanups.set(panel, () => panel.removeEventListener('transitionend', handleEnd));
